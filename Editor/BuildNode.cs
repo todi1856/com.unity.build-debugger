@@ -135,7 +135,7 @@ namespace Unity.BuildDebugger
             var port = AddPort(path, Direction.Input);
             port.Add(new PortInformation(parent, DependencyType.File, path, -1));
             if (!m_InputPortsAsPaths.TryAdd(path, port))
-                Debug.LogWarning($"Output port with name {path} already exists in node {DagNode.Annotation}");
+                Debug.LogWarning($"Input port with name {path} already exists in node {DagNode.Annotation}");
             return port;
         }
 
@@ -154,7 +154,7 @@ namespace Unity.BuildDebugger
             var port = AddPort(path, Direction.Output);
             port.Add(new PortInformation(parent,DependencyType.File, path, -1));
             if (!m_OutputPortsAsPaths.TryAdd(path, port))
-                Debug.LogWarning($"Input port with name {path} already exists in node {DagNode.Annotation}");
+                Debug.LogWarning($"Output port with name {path} already exists in node {DagNode.Annotation}");
             return port;
         }
 
