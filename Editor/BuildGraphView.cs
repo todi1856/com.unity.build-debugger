@@ -162,16 +162,30 @@ namespace Unity.BuildDebugger
             foreach (var n in data.Nodes)
                 m_DagNodeCache.Add(n.DebugActionIndex, n);
 
-            foreach (var n in data.Nodes)
+            int maxNodes = data.Nodes.Count;
+            int currentNode = 0;
+            try
             {
-                if (n.Annotation.Equals("all_tundra_nodes"))
-                    continue;
-                if (n.Annotation.Equals("Player"))
-                    continue;
+                currentNode = 0;
+                foreach (var n in data.Nodes)
+                {
+                    if (n.Annotation.Equals("all_tundra_nodes"))
+                        continue;
+                    if (n.Annotation.Equals("Player"))
+                        continue;
 
-                var node = BuildNode.Create(this, n, m_DagNodeCache);
-                AddElement(node);
-                m_BuildNodeCache.Add(n.DebugActionIndex, node);
+                    EditorUtility.DisplayProgressBar($"Creating Node ({currentNode}/{maxNodes})", n.Annotation, (float)currentNode / maxNodes);
+                    currentNode++;
+
+                    var node = BuildNode.Create(this, n, m_DagNodeCache);
+                    AddElement(node);
+                    m_BuildNodeCache.Add(n.DebugActionIndex, node);
+                    currentNode++;
+                }
+            }
+            finally
+            {
+                EditorUtility.ClearProgressBar();
             }
 
             void ConnectPorts(BuildNode inputParent, Port input, BuildNode outputParent, Port output)
@@ -179,17 +193,14 @@ namespace Unity.BuildDebugger
                 if (output == null || input == null)
                     return;
 
-                // TODO: output port can connect to multiple input ports, something to do with jump button?
-
                 var edge = output.ConnectTo(input);
                 AddElement(edge);
             }
 
-            int maxNodes = m_BuildNodeCache.Values.Count;
-            int currentNode = 0;
 
             try
             {
+                currentNode = 0;
                 // Connecting input to outputs
                 foreach (var buildNode in m_BuildNodeCache.Values)
                 {
