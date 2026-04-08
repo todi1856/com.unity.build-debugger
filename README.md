@@ -27,6 +27,8 @@ Also it can be used to execute bee why to display information why a specific nod
 1. The build debugger window can be opened via **Window → Analysis → Build Debugger**.
 1. It will also open automatically when producing a build from Unity.
 
+__Note__: By default nodes are collapsed to minimize the graph, you can expand them by clicking on the arrow next to the node name or by double-clicking on the node.
+
 ## Navigation
 
 On the left pane you can see the navigation window.
@@ -60,3 +62,7 @@ Right-clicking on a node in the graph view will open a context menu with the fol
 * **Copy Action** - copies the action of the node to the clipboard, if there is one.
 * **Copy Dag Node** - copies the entire DAG node information to the clipboard in JSON format.
 * **BeeWhy this node was build?** - executes the command `bee why <node name>` in the terminal and displays the output in a new window. This option is only available for nodes which were modified during the build. __Note:__ EmitBeeWhy diagnostics switch must be enabled before producing the build.
+
+![main](Documentation~/images/ContextMenuPort.png)
+Right-clicking on an input/output port in the graph view will open a context menu with the following options:
+* **Reveal In Finder** - reveals the file in the file explorer.
