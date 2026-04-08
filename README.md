@@ -1,6 +1,6 @@
 # Build Debugger for Unity
 
-A utility for visualizing .dag.json file - which produced by Unity when building a player.
+A utility for visualizing **.dag.json** files - which produced by Unity when building a player.
 
 It can also be used to execute bee why to display information why a specific node was updated.
 
