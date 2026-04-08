@@ -4,9 +4,12 @@ A utility for visualizing **.dag.json** files - which are produced by Unity when
 
 It can also be used to execute bee why to display information why a specific node was updated.
 
+__Note:__ Graph visualization is done via **UnityEditor.Experimental.GraphView** API.
+
 ![main](Documentation~/images/BuildDebugger1.png)
 
 ![main](Documentation~/images/BuildDebugger2.png)
+
 
 ## Requirements
 
