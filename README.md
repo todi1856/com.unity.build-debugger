@@ -1,4 +1,4 @@
-Build Debugger for Unity
+# Build Debugger for Unity
 
 An utility for visualizing .dag.json file - which produced by Unity when building a player.
 
@@ -26,3 +26,37 @@ Also it can be used to execute bee why to display information why a specific nod
 
 1. The build debugger window can be opened via **Window → Analysis → Build Debugger**.
 1. It will also open automatically when producing a build from Unity.
+
+## Navigation
+
+On the left pane you can see the navigation window.
+
+![main](Documentation~/images/Navigation.png)
+
+There are three ways to filter the nodes:
+* By **Name** - by typing the name of the node in the search field.
+* By **Input** - by typing the input of the node in the search field, any build nodes having the filtered input will be displayed in the list.
+* By **Output** - by typing the output of the node in the search field, any build nodes having the filtered output will be displayed in the list.
+
+Once you've selected a node, click **Jump To** to focus on the selected node in the graph view. You can then click on arrows next to input/output ports to navigate to other nodes.
+By click **Jump To Previous** you can navigate to the previously selected node.
+
+__Note:__ Nodes which were modified during the build will be highlighted in red.
+
+## Other options 
+
+![main](Documentation~/images/OtherOptions.png)
+
+* **Load On Build** - when enabled, the build debugger will automatically load the .dag.json file after a build is produced.
+* **Ignore Player Node On Load** - when enabled, the build debugger will ignore the player node when loading the .dag.json file. This is useful when you want to analyze the build without the player node, which can be very large and can cause graph to be harder to view.
+* **Open Dag Json** - manually open the .dag.json, unlike the automatic loading, this option will not load tundra.log.json, thus build debugger doesn't know which nodes were modified during the build.
+
+## Context Menu
+
+![main](Documentation~/images/ContextMenu.png)
+
+Right-clicking on a node in the graph view will open a context menu with the following options:
+* **Copy Node Annotation** - copies the annotation of the node to the clipboard.
+* **Copy Action** - copies the action of the node to the clipboard, if there is one.
+* **Copy Dag Node** - copies the entire DAG node information to the clipboard in JSON format.
+* **BeeWhy this node was build?** - executes the command `bee why <node name>` in the terminal and displays the output in a new window. This option is only available for nodes which were modified during the build. __Note:__ EmitBeeWhy diagnostics switch must be enabled before producing the build.
