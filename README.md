@@ -3,6 +3,7 @@
 A utility for visualizing **.dag.json** files - which are produced by Unity when building a player. This utility also uses **bee why** command to provide more insights on why a specific node was built, which can be very useful when analyzing incremental builds.
 
 ### What is .dag.json?
+
 When producing a build from Unity, a **unityproject\Library\Bee\Player____.dag.json** file is generated.
 It represents the build graph used by incremental build pipeline, by inspecting dag nodes and their inputs/outputs, you can get a better understanding of the build process and how different nodes are connected to each other.
 
