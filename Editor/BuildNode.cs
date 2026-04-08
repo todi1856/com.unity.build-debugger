@@ -201,7 +201,7 @@ namespace Unity.BuildDebugger
                     {
                         var portInfo = port.Q<PortInformation>();
                         parent.PushNode(portInfo.Owner);
-                        parent.FocusNode(targetNode, false);
+                        parent.FocusNode(targetNode, false, true);
                     }
 
                     if (connections.Count == 1)

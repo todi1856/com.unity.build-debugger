@@ -69,10 +69,10 @@ namespace Unity.BuildDebugger
             var targetNode = nodes.ToList().Cast<Node>()
                 .FirstOrDefault(n => n.title.ToLower().Contains(title.ToLower()));
 
-            FocusNode(targetNode);
+            FocusNode(targetNode, true, true);
         }
 
-        public void FocusNode(Node node, bool memorizeCurrentNode  = true)
+        public void FocusNode(Node node, bool memorizeCurrentNode, bool animate)
         {
             if (node == null)
                 return;
@@ -89,12 +89,15 @@ namespace Unity.BuildDebugger
             AddToSelection(node);
             FrameSelection();
 
-            // Dumb way of animating things
-            AnimateFrame(
-                startTranslation, 
-                startScale,
-                contentViewContainer.resolvedStyle.translate,
-                contentViewContainer.resolvedStyle.scale.value);
+            if (animate)
+            {
+                // Dumb way of animating things
+                AnimateFrame(
+                    startTranslation,
+                    startScale,
+                    contentViewContainer.resolvedStyle.translate,
+                    contentViewContainer.resolvedStyle.scale.value);
+            }
         }
 
         public void AnimateFrame( 
@@ -239,8 +242,6 @@ namespace Unity.BuildDebugger
                 buildNode.expanded = false;
             }
 
-            FocusNode(m_BuildNodeCache.Values.FirstOrDefault());
-
             RegisterCallback<GeometryChangedEvent>(OnGraphViewResized);
             schedule.Execute(() => OnGraphViewResized(new GeometryChangedEvent())).ExecuteLater(500);
         }
@@ -284,6 +285,8 @@ namespace Unity.BuildDebugger
                     verticalOffsetCache[dagNode.Depth] = position.y + height + 50;
                     n.SetPosition(new Rect(position, new Vector2(width, height)));
                 }
+
+                FocusNode(m_BuildNodeCache.Values.FirstOrDefault(), true, false);
             }
             finally
             {

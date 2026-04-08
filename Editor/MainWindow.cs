@@ -18,7 +18,7 @@ namespace Unity.BuildDebugger
         [MenuItem("Window/Analysis/Build Debugger")]
         public static MainWindow Open()
         {
-            var wnd = GetWindow<MainWindow>("Dag Json Loader");
+            var wnd = GetWindow<MainWindow>("Build Debugger");
             wnd.Focus();
             wnd.Show();
             return wnd;
@@ -156,7 +156,7 @@ namespace Unity.BuildDebugger
             var previousNode = m_GraphView.PopNode();
             if (previousNode == null)
                 return;
-            m_GraphView.FocusNode(previousNode, false);
+            m_GraphView.FocusNode(previousNode, false, true);
         }
 
         private void LoadDagJson()
