@@ -1,8 +1,8 @@
 # Build Debugger for Unity
 
-An utility for visualizing .dag.json file - which produced by Unity when building a player.
+A utility for visualizing .dag.json file - which produced by Unity when building a player.
 
-Also it can be used to execute bee why to display information why a specific node was updated.
+It can also be used to execute bee why to display information why a specific node was updated.
 
 ![main](Documentation~/images/BuildDebugger1.png)
 
@@ -27,7 +27,7 @@ Also it can be used to execute bee why to display information why a specific nod
 1. The build debugger window can be opened via **Window → Analysis → Build Debugger**.
 1. It will also open automatically when producing a build from Unity.
 
-__Note__: By default nodes are collapsed to minimize the graph, you can expand them by clicking on the arrow next to the node name or by double-clicking on the node.
+__Note__: By default, nodes are collapsed to minimize the graph, you can expand them by clicking on the arrow next to the node name or by double-clicking on the node.
 
 ## Navigation
 
@@ -41,7 +41,7 @@ There are three ways to filter the nodes:
 * By **Output** - by typing the output of the node in the search field, any build nodes having the filtered output will be displayed in the list.
 
 Once you've selected a node, click **Jump To** to focus on the selected node in the graph view. You can then click on arrows next to input/output ports to navigate to other nodes.
-By click **Jump To Previous** you can navigate to the previously selected node.
+By clicking **Jump To Previous** you can navigate to the previously selected node.
 
 __Note:__ Nodes which were modified during the build will be highlighted in red.
 
@@ -61,7 +61,7 @@ Right-clicking on a node in the graph view will open a context menu with the fol
 * **Copy Node Annotation** - copies the annotation of the node to the clipboard.
 * **Copy Action** - copies the action of the node to the clipboard, if there is one.
 * **Copy Dag Node** - copies the entire DAG node information to the clipboard in JSON format.
-* **BeeWhy this node was build?** - executes the command `bee why <node name>` in the terminal and displays the output in a new window. This option is only available for nodes which were modified during the build. __Note:__ EmitBeeWhy diagnostics switch must be enabled before producing the build.
+* **BeeWhy this node was built?** - executes the command `bee why <node name>` in the terminal and displays the output in a new window. This option is only available for nodes which were modified during the build. __Note:__ The EmitBeeWhy diagnostics switch must be enabled before producing the build.
 
 ![main](Documentation~/images/ContextMenuPort.png)
 Right-clicking on an input/output port in the graph view will open a context menu with the following options:
