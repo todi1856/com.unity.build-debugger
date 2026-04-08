@@ -1,0 +1,7 @@
+{
+    "name": "com.unity.build-debugger",
+    "displayName": "Unity Build Debugger",
+    "version": "0.0.1",
+    "unity": "6000.0",
+    "description": "Incremental build pipeline debugger. Displays .dag.json graph. Invokes bee why - explaining why node was rebuilt."
+}

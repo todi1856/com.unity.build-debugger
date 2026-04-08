@@ -1,0 +1,33 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xmlns:graph="UnityEditor.Experimental.GraphView" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" editor-extension-mode="True">
+    <ui:TwoPaneSplitView orientation="Horizontal" fixed-pane-initial-dimension="300">
+        <ui:VisualElement style="flex-grow: 1; flex-direction: column;">
+            <ui:VisualElement style="flex-grow: 0; flex-direction: row;">
+                <ui:Label text="&lt;b&gt;Filter By:&lt;/b&gt;" style="-unity-text-align: middle-left;"/>
+                <ui:TabView name="tabView">
+                    <ui:Tab label="Name"/>
+                    <ui:Tab label="Inputs"/>
+                    <ui:Tab label="Outputs"/>
+                </ui:TabView>
+            </ui:VisualElement>
+            <uie:ToolbarSearchField name="toolbarSearchFieldNodes" view-data-key="toolbarSearchFieldNodes" style="padding-top: 0; padding-bottom: 0; padding-right: 0; padding-left: 0; margin-top: 6px; margin-bottom: 6px; margin-right: 0; margin-left: 4px;"/>
+            <ui:VisualElement style="flex-grow: 1; flex-shrink: 1;">
+                <ui:ListView show-border="true" show-foldout-header="false" allow-add="false" allow-remove="false" name="listViewNodes" horizontal-scrolling="true" show-alternating-row-backgrounds="All" style="flex-shrink: 1; flex-grow: 1; height: auto;"/>
+                <ui:VisualElement name="extraInformation" style="flex-grow: 0; flex-shrink: 0; height: 300px;">
+                    <ui:Label text="" name="extraInformationLabel"/>
+                    <ui:ListView show-border="true" show-foldout-header="false" allow-add="false" allow-remove="false" name="listViewPorts" horizontal-scrolling="true" show-alternating-row-backgrounds="All" selection-type="None" style="flex-grow: 1; flex-shrink: 0;"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 0; flex-shrink: 0; flex-direction: row; min-height: auto;">
+                <ui:Button name="btnJumpToNode" text="Jump To" style="flex-grow: 1; flex-shrink: 1;"/>
+                <ui:Button name="btnJumpToPrevious" text="Jump To Previous" style="flex-grow: 1; flex-shrink: 1;"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="" style="flex-grow: 1; flex-direction: column;">
+            <ui:VisualElement name="toolbar" style="flex-direction: row; background-color: rgb(51, 51, 51); padding: 4px;">
+                <ui:Button name="loadButton" text="Load JSON File"/>
+                <ui:VisualElement name="dbgElements" style="flex-direction: row;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="graphContainer" style="flex-grow: 1;"/>
+        </ui:VisualElement>
+    </ui:TwoPaneSplitView>
+</ui:UXML>

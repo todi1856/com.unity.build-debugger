@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.rubix.unity.build-debugger/Editor/UI/Styles.uss?fileID=7433441132597879392&amp;guid=402b306bef7d12a47a9d08db7fd11595&amp;type=3#Styles"/>
+    <ui:ScrollView horizontal-scroller-visibility="AlwaysVisible" vertical-scroller-visibility="AlwaysVisible" mode="VerticalAndHorizontal" style="flex-grow: 1;">
+        <ui:TextField name="contents" multiline="true" class="scrollable-textfield"/>
+    </ui:ScrollView>
+</ui:UXML>

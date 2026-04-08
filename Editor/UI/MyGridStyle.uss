@@ -1,0 +1,13 @@
+GridBackground {
+    /* Color of the background */
+    --grid-background-color: #212121;
+    
+    /* Color of the thin lines */
+    --line-color: rgba(193, 196, 192, 0.1);
+    
+    /* Color of the thick lines (every 10th line) */
+    --thick-line-color: rgba(193, 196, 192, 0.15);
+    
+    /* Spacing between thin lines */
+    --spacing: 10;
+}
