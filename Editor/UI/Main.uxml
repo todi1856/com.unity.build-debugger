@@ -23,10 +23,14 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="" style="flex-grow: 1; flex-direction: column;">
-            <ui:VisualElement name="toolbar" style="flex-direction: row; background-color: rgb(51, 51, 51); padding: 4px;">
-                <ui:Button name="loadButton" text="Load JSON File"/>
-                <ui:VisualElement name="dbgElements" style="flex-direction: row;"/>
-            </ui:VisualElement>
+            <uie:Toolbar>
+                <uie:ToolbarToggle label="Auto Open" name="toolbarToggleAutoOpen" value="false"/>
+                <uie:ToolbarButton text="Load Dag Json" name="loadButton"/>
+                <uie:ToolbarSpacer style="flex-grow: 1; flex-shrink: 0;"/>
+                <ui:VisualElement name="dbgElements" style="flex-direction: row;">
+                    <ui:Label text="&lt;b&gt;Debug options:&lt;/b&gt;" style="-unity-text-align: middle-left;"/>
+                </ui:VisualElement>
+            </uie:Toolbar>
             <ui:VisualElement name="graphContainer" style="flex-grow: 1;"/>
         </ui:VisualElement>
     </ui:TwoPaneSplitView>

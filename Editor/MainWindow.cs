@@ -22,6 +22,7 @@ namespace Unity.BuildDebugger
             return wnd;
         }
 
+        private UserSettings m_UserSettings;
         private BuildGraphView m_GraphView;
         private ListView m_NodeListView;
         private VisualElement m_NodeExtraInformation;
@@ -32,6 +33,16 @@ namespace Unity.BuildDebugger
 
         Dictionary<int, DagNode> m_NodeCache = new Dictionary<int, DagNode>();
         List<TundraLogEntry> m_TundraLogEntries = new List<TundraLogEntry>();
+
+        public void OnEnable()
+        {
+            m_UserSettings = UserSettings.GetOrLoad();
+        }
+
+        public void OnDisable()
+        {
+            UserSettings.Save();
+        }
 
         public void CreateGUI()
         {
@@ -49,14 +60,16 @@ namespace Unity.BuildDebugger
             visualTree.CloneTree(r);
 
             // Query elements
-            var loadBtn = r.Q<Button>("loadButton");
+            var loadBtn = r.Q<ToolbarButton>("loadButton");
+            loadBtn.clicked += LoadDagJson;
+
             var graphContainer = r.Q<VisualElement>("graphContainer");
 
             // Create and add GraphView
             m_GraphView = new BuildGraphView();
             m_GraphView.style.flexGrow = 1;
             graphContainer.Add(m_GraphView);
-            loadBtn.clicked += LoadDagJson;
+
 
             // List build nodes
             {
@@ -102,19 +115,13 @@ namespace Unity.BuildDebugger
 
             var dbgElements = r.Q<VisualElement>("dbgElements");
             dbgElements.visible = Unsupported.IsDeveloperMode();
-            dbgElements.Add(new Button(() =>
+            dbgElements.Add(new ToolbarButton(() =>
             {
                 LoadUI();
             })
             { text = "Reload UI" });
 
-            dbgElements.Add(new Button(() =>
-            {
-                Utilities.Log($"GraphView {m_GraphView.contentViewContainer.transform.position} {m_GraphView.contentViewContainer.resolvedStyle.translate}");
-            })
-            { text = "Print" });
-
-            dbgElements.Add(new Button(() =>
+            dbgElements.Add(new ToolbarButton(() =>
             {
                 InfoWindow.Open(File.ReadAllText(Utilities.ResolveUIPath("Main.uxml")));
             })
@@ -145,9 +152,10 @@ namespace Unity.BuildDebugger
 
         private void LoadDagJson()
         {
-            var path = EditorUtility.OpenFilePanel("Select Dag JSON", "Assets", "dag.json");
+            var path = EditorUtility.OpenFilePanel("Select Dag JSON", m_UserSettings.LastDagJsonPath, "dag.json");
             if (string.IsNullOrEmpty(path))
                 return;
+            m_UserSettings.LastDagJsonPath = Path.GetDirectoryName(path);
             LoadDagJson(path);
             FilterBuildNodes();
         }

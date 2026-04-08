@@ -6,11 +6,15 @@ using UnityEditor.Callbacks;
 
 namespace Unity.BuildDebugger
 {
-    public class MyBuildPostprocessor
+    public class BuildPostprocessor
     {
         [PostProcessBuildAttribute(1)]
         public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
         {
+            var settings = UserSettings.GetOrLoad();
+            if (!settings.AutoLoadPlayerDagJson)
+                return;
+
             var window = MainWindow.Open();
             window.LoadDagJson(GetNewestFile("Library/Bee", "Player*.json"));
             window.LoadTundraJson(GetNewestFile("Library/Bee", "tundra.log.json"));
