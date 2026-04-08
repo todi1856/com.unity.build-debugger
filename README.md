@@ -53,7 +53,7 @@ __Note:__ Nodes which were modified during the build will be highlighted in red.
 * **Ignore Player Node On Load** - when enabled, the build debugger will ignore the player node when loading the .dag.json file. This is useful when you want to analyze the build without the player node, which can be very large and can cause graph to be harder to view.
 * **Open Dag Json** - manually open the .dag.json, unlike the automatic loading, this option will not load tundra.log.json, thus build debugger doesn't know which nodes were modified during the build.
 
-## Context Menu
+## Context Menu (Nodes)
 
 ![main](Documentation~/images/ContextMenu.png)
 
@@ -61,8 +61,16 @@ Right-clicking on a node in the graph view will open a context menu with the fol
 * **Copy Node Annotation** - copies the annotation of the node to the clipboard.
 * **Copy Action** - copies the action of the node to the clipboard, if there is one.
 * **Copy Dag Node** - copies the entire DAG node information to the clipboard in JSON format.
-* **BeeWhy this node was built?** - executes the command `bee why <node name>` in the terminal and displays the output in a new window. This option is only available for nodes which were modified during the build. __Note:__ The EmitBeeWhy diagnostics switch must be enabled before producing the build.
+* **BeeWhy this node was built?** - executes the command `bee why <node name>` in the terminal and displays the output in a new window. This option is only available for nodes which were modified during the build. 
+    * __Note:__ The EmitBeeWhy diagnostics switch must be enabled before producing the build.
 
+![main](Documentation~/images/EmitBeeWhy.png)
+
+If done correct **bee why** will print the following information:
+![main](Documentation~/images/BeeWhyInfo.png)
+
+## Context Menu (Ports)
 ![main](Documentation~/images/ContextMenuPort.png)
+
 Right-clicking on an input/output port in the graph view will open a context menu with the following options:
 * **Reveal In Finder** - reveals the file in the file explorer.
