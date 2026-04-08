@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -185,6 +186,15 @@ namespace Unity.BuildDebugger
             // Initialize port details
             {
                 port.portName = name;
+
+                port.AddManipulator(new ContextualMenuManipulator(evt =>
+                {
+                    evt.menu.AppendAction("Reveal In Finder", a =>
+                    {
+                        EditorUtility.RevealInFinder(name);
+                    });
+                }));
+
                 var l = port.Q<Label>();
                 var container = new VisualElement();
                 container.style.flexDirection = FlexDirection.Row;
