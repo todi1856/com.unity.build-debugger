@@ -180,7 +180,6 @@ namespace Unity.BuildDebugger
                     var node = BuildNode.Create(this, n, m_DagNodeCache);
                     AddElement(node);
                     m_BuildNodeCache.Add(n.DebugActionIndex, node);
-                    currentNode++;
                 }
             }
             finally
