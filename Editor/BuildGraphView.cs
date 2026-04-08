@@ -1,12 +1,11 @@
+using NUnit;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.Progress;
 
 namespace Unity.BuildDebugger
 {
@@ -244,38 +243,46 @@ namespace Unity.BuildDebugger
         {
             UnregisterCallback<GeometryChangedEvent>(OnGraphViewResized);
 
-            Debug.Log("Resizing Graph View...");
-            var maxWidthsPerDepth = new float[m_MaxDepth];
-            foreach (var n in nodes)
+            var start = DateTime.Now;
+            try
             {
-                var dagNode = ((BuildNode)n).DagNode;
-                var width = n.layout.width;
-                if (width > maxWidthsPerDepth[dagNode.Depth])
-                    maxWidthsPerDepth[dagNode.Depth] = width;
+                var maxWidthsPerDepth = new float[m_MaxDepth];
+                foreach (var n in nodes)
+                {
+                    var dagNode = ((BuildNode)n).DagNode;
+                    var width = n.layout.width;
+                    if (width > maxWidthsPerDepth[dagNode.Depth])
+                        maxWidthsPerDepth[dagNode.Depth] = width;
+                }
+
+                var verticalOffsetCache = new Dictionary<int, float>();
+                var horizontalOffsetsPerDepth = new float[m_MaxDepth];
+                for (int i = 0; i < maxWidthsPerDepth.Length; i++)
+                {
+                    if (i == 0)
+                        horizontalOffsetsPerDepth[i] = 0;
+                    else
+                        horizontalOffsetsPerDepth[i] = horizontalOffsetsPerDepth[i - 1] + maxWidthsPerDepth[i - 1] + 20;
+                }
+
+                foreach (var n in nodes)
+                {
+                    var dagNode = ((BuildNode)n).DagNode;
+                    var height = n.layout.height;
+                    var width = n.layout.width;
+
+                    var position = new Vector2(horizontalOffsetsPerDepth[dagNode.Depth], 0);
+                    if (verticalOffsetCache.TryGetValue(dagNode.Depth, out var cachedOffset))
+                        position.y += cachedOffset;
+
+                    verticalOffsetCache[dagNode.Depth] = position.y + height + 50;
+                    n.SetPosition(new Rect(position, new Vector2(width, height)));
+                }
             }
-
-            var verticalOffsetCache = new Dictionary<int, float>();
-            var horizontalOffsetsPerDepth = new float[m_MaxDepth];
-            for (int i = 0; i < maxWidthsPerDepth.Length; i++)
+            finally
             {
-                if (i == 0)
-                    horizontalOffsetsPerDepth[i] = 0;
-                else
-                    horizontalOffsetsPerDepth[i] = horizontalOffsetsPerDepth[i - 1] + maxWidthsPerDepth[i - 1] + 20;
-            }
-
-            foreach (var n in nodes)
-            {
-                var dagNode = ((BuildNode)n).DagNode;
-                var height = n.layout.height;
-                var width = n.layout.width;
-
-                var position = new Vector2(horizontalOffsetsPerDepth[dagNode.Depth], 0);
-                if (verticalOffsetCache.TryGetValue(dagNode.Depth, out var cachedOffset))
-                    position.y += cachedOffset;
-
-                verticalOffsetCache[dagNode.Depth] = position.y + height + 50;
-                n.SetPosition(new Rect(position, new Vector2(width, height)));
+                var end = DateTime.Now;
+                Utilities.Log($"Graph resizing took {(end - start).TotalSeconds} seconds.");
             }
         }
     }

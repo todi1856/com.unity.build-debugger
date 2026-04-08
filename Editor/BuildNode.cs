@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -90,6 +88,7 @@ namespace Unity.BuildDebugger
         {
             if (evt.target is Node)
             {
+                /*
                 evt.menu.AppendAction("Copy All", action =>
                 {
                     var builder = new StringBuilder();
@@ -107,6 +106,11 @@ namespace Unity.BuildDebugger
 
                     EditorGUIUtility.systemCopyBuffer = builder.ToString();
                 });
+                //*/
+                evt.menu.AppendAction("Copy Node Annotation", action =>
+                {
+                    EditorGUIUtility.systemCopyBuffer = DagNode.Annotation;
+                });
                 evt.menu.AppendAction("Copy Action", action =>
                 {
                     EditorGUIUtility.systemCopyBuffer = DagNode.Action;
@@ -116,7 +120,7 @@ namespace Unity.BuildDebugger
                     EditorGUIUtility.systemCopyBuffer = JsonUtility.ToJson(DagNode, true);
                 });
 
-                evt.menu.AppendAction("Why this node was built?", action =>
+                evt.menu.AppendAction("BeeWhy this node was built?", action =>
                 {
                     InfoWindow.Open(BeeUtilities.ExecuteBeeWhyStandalone(DagNode.Annotation));
                 });
