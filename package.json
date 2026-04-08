@@ -3,5 +3,9 @@
     "displayName": "Unity Build Debugger",
     "version": "0.0.1",
     "unity": "6000.0",
-    "description": "Incremental build pipeline debugger. Displays .dag.json graph. Invokes bee why - explaining why node was rebuilt."
+    "description": "Incremental build pipeline debugger. Displays .dag.json graph. Invokes bee why - explaining why node was rebuilt.",
+    "author": {
+        "name": "Tomas Dirvanauskas",
+        "email": "tomas@unity3d.com"
+    }
 }
