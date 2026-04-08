@@ -71,6 +71,13 @@ namespace Unity.BuildDebugger
                 m_UserSettings.AutoLoadPlayerDagJson = evt.newValue;
             });
 
+            var ignoreNodePlayer = r.Q<ToolbarToggle>("toolbarIgnoreNodePlayer");
+            ignoreNodePlayer.value = m_UserSettings.IgnoreNodePlayer;
+            ignoreNodePlayer.RegisterValueChangedCallback(evt =>
+            {
+                m_UserSettings.IgnoreNodePlayer = evt.newValue;
+            });
+
             var graphContainer = r.Q<VisualElement>("graphContainer");
 
             // Create and add GraphView
@@ -102,17 +109,9 @@ namespace Unity.BuildDebugger
                 m_NodeExtraInformationLabel = r.Q<Label>("extraInformationLabel");
                 m_PortsListView = r.Q<ListView>("listViewPorts");
                 m_SearchField = r.Q<ToolbarSearchField>("toolbarSearchFieldNodes");
-                m_SearchField.RegisterValueChangedCallback(evt =>
-                {
-                    FilterBuildNodes();
-                    FilterPorts();
-                });
+                m_SearchField.RegisterValueChangedCallback(evt => FilterBuildNodesAndPorts());
                 m_TabView = r.Q<TabView>("tabView");
-                m_TabView.activeTabChanged += (oldTab, newTab) =>
-                {
-                    FilterBuildNodes();
-                    FilterPorts();
-                };
+                m_TabView.activeTabChanged += (oldTab, newTab) => FilterBuildNodesAndPorts();
             }
 
 
@@ -168,13 +167,19 @@ namespace Unity.BuildDebugger
             m_UserSettings.LastDagJsonPath = Path.GetDirectoryName(path);
             var data = LoadDagJson(path);
             ConstructGraph(data, false);
-            FilterBuildNodes();
+            FilterBuildNodesAndPorts();
             SetStatusBarMessage($"Loaded \"{path}\" with {m_GraphView.BuildNodes.Count} build nodes.");
         }
 
         private bool PortMatchesSearch(Port port)
         {
             return port.portName.Contains(m_SearchField.value, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private void FilterBuildNodesAndPorts()
+        {
+            FilterBuildNodes();
+            FilterPorts();
         }
 
         private void FilterBuildNodes()
@@ -288,6 +293,7 @@ namespace Unity.BuildDebugger
             }
 
             ConstructGraph(data, true);
+            FilterBuildNodesAndPorts();
             SetStatusBarMessage(@$"Loaded ""{dagPath}"" with {m_GraphView.BuildNodes.Count} build nodes.
 Loaded ""{tundraPath}"", {tundraEntries.Count} build nodes were modified.");
         }
@@ -329,7 +335,7 @@ Loaded ""{tundraPath}"", {tundraEntries.Count} build nodes were modified.");
         internal void ConstructGraph(DagFile data, bool markModifiedNodes)
         {
             var start = DateTime.Now;
-            m_GraphView.PopulateFromData(data, markModifiedNodes);
+            m_GraphView.PopulateFromData(data, m_UserSettings.IgnoreNodePlayer, markModifiedNodes);
             var end = DateTime.Now;
             Utilities.Log($"Graph construction took {(end - start).TotalSeconds} seconds.");
         }

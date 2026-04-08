@@ -18,6 +18,9 @@ namespace Unity.BuildDebugger
 
             [SerializeField]
             internal bool AutoLoadPlayerDagJson;
+
+            [SerializeField]
+            internal bool IgnoreNodePlayer;
         }
 
         [SerializeField]
@@ -35,6 +38,12 @@ namespace Unity.BuildDebugger
             set => m_Settings.AutoLoadPlayerDagJson = value;
         }
 
+        public bool IgnoreNodePlayer
+        {
+            get => m_Settings.IgnoreNodePlayer;
+            set => m_Settings.IgnoreNodePlayer = value;
+        }
+
         internal UserSettings()
         {
             Reset();
@@ -45,7 +54,8 @@ namespace Unity.BuildDebugger
             m_Settings = new Setttings()
             {
                 LastDagJsonPath = "Assets",
-                AutoLoadPlayerDagJson = true
+                AutoLoadPlayerDagJson = true,
+                IgnoreNodePlayer = true
             };
         }
 

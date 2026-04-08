@@ -143,7 +143,7 @@ namespace Unity.BuildDebugger
             return null;
         }
 
-        public void PopulateFromData(DagFile data, bool markModifiedNodes)
+        public void PopulateFromData(DagFile data, bool ignorePlayerNode, bool markModifiedNodes)
         {
             m_CurrentNode = null;
             m_Queue = new LinkedList<BuildNode>();
@@ -169,9 +169,15 @@ namespace Unity.BuildDebugger
                 foreach (var n in data.Nodes)
                 {
                     if (n.Annotation.Equals("all_tundra_nodes"))
+                    {
+                        Utilities.LogWarning("Skipping node with annotation 'all_tundra_nodes' as it is not relevant for visualization.");
                         continue;
-                    if (n.Annotation.Equals("Player"))
+                    }
+                    if (ignorePlayerNode && n.Annotation.Equals("Player"))
+                    {
+                        Utilities.LogWarning("Skipping node with annotation 'Player' as per user settings.");
                         continue;
+                    }
 
                     EditorUtility.DisplayProgressBar($"Creating Node ({currentNode}/{maxNodes})", n.Annotation, (float)currentNode / maxNodes);
                     currentNode++;
