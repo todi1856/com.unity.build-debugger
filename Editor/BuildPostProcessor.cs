@@ -16,8 +16,8 @@ namespace Unity.BuildDebugger
                 return;
 
             var window = MainWindow.Open();
-            window.LoadDagJson(GetNewestFile("Library/Bee", "Player*.json"));
-            window.LoadTundraJson(GetNewestFile("Library/Bee", "tundra.log.json"));
+            window.LoadDagJsonAndTundra(GetNewestFile("Library/Bee", "Player*.json")
+                , GetNewestFile("Library/Bee", "tundra.log.json"));
         }
 
         private static string GetNewestFile(string beeFolderPath, string filter)

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.PackageManager.UI;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -30,6 +31,7 @@ namespace Unity.BuildDebugger
         private ListView m_PortsListView;
         private ToolbarSearchField m_SearchField;
         private TabView m_TabView;
+        private Label m_StatusBar;
 
         Dictionary<int, DagNode> m_NodeCache = new Dictionary<int, DagNode>();
         List<TundraLogEntry> m_TundraLogEntries = new List<TundraLogEntry>();
@@ -62,6 +64,12 @@ namespace Unity.BuildDebugger
             // Query elements
             var loadBtn = r.Q<ToolbarButton>("loadButton");
             loadBtn.clicked += LoadDagJson;
+            var autoLoad = r.Q<ToolbarToggle>("toolbarToggleLoadOnBuild");
+            autoLoad.value = m_UserSettings.AutoLoadPlayerDagJson;
+            autoLoad.RegisterValueChangedCallback(evt =>
+            {
+                m_UserSettings.AutoLoadPlayerDagJson = evt.newValue;
+            });
 
             var graphContainer = r.Q<VisualElement>("graphContainer");
 
@@ -126,6 +134,8 @@ namespace Unity.BuildDebugger
                 InfoWindow.Open(File.ReadAllText(Utilities.ResolveUIPath("Main.uxml")));
             })
             { text = "Info window" });
+
+            m_StatusBar = r.Q<Label>("labelStatusBar");
         }
 
         private void M_TabView_activeTabChanged(Tab arg1, Tab arg2)
@@ -158,6 +168,7 @@ namespace Unity.BuildDebugger
             m_UserSettings.LastDagJsonPath = Path.GetDirectoryName(path);
             LoadDagJson(path);
             FilterBuildNodes();
+            SetStatusBarMessage($"Loaded \"{path}\" with {m_GraphView.BuildNodes.Count} build nodes.");
         }
 
         private bool PortMatchesSearch(Port port)
@@ -253,6 +264,14 @@ namespace Unity.BuildDebugger
             SetItems(filteredPorts);
         }
 
+        internal void LoadDagJsonAndTundra(string dagPath, string tundraPath)
+        {
+            LoadDagJson(dagPath);
+            LoadTundraJson(tundraPath);
+            SetStatusBarMessage(@$"Loaded ""{dagPath}"" with {m_GraphView.BuildNodes.Count} build nodes.
+Loaded ""{tundraPath}"".");
+        }
+
         internal void LoadDagJson(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -326,6 +345,11 @@ namespace Unity.BuildDebugger
             }
             depthCache[node.DebugActionIndex] = maxDepth;
             return maxDepth;
+        }
+
+        public void SetStatusBarMessage(string message)
+        {
+            m_StatusBar.text = $"<b>{message}</b>";
         }
     }
 }

@@ -24,14 +24,15 @@
         </ui:VisualElement>
         <ui:VisualElement name="" style="flex-grow: 1; flex-direction: column;">
             <uie:Toolbar>
-                <uie:ToolbarToggle label="Auto Open" name="toolbarToggleAutoOpen" value="false"/>
-                <uie:ToolbarButton text="Load Dag Json" name="loadButton"/>
+                <uie:ToolbarToggle label="Load On Build" name="toolbarToggleLoadOnBuild" value="false"/>
+                <uie:ToolbarButton text="Open Dag Json" name="loadButton"/>
                 <uie:ToolbarSpacer style="flex-grow: 1; flex-shrink: 0;"/>
                 <ui:VisualElement name="dbgElements" style="flex-direction: row;">
                     <ui:Label text="&lt;b&gt;Debug options:&lt;/b&gt;" style="-unity-text-align: middle-left;"/>
                 </ui:VisualElement>
             </uie:Toolbar>
             <ui:VisualElement name="graphContainer" style="flex-grow: 1;"/>
+            <UnityEditor.PackageManager.UI.Internal.SelectableLabel text="" name="labelStatusBar" style="height: 35px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);"/>
         </ui:VisualElement>
     </ui:TwoPaneSplitView>
 </ui:UXML>
