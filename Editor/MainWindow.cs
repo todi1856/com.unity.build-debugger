@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Unity.Android.Gradle.Manifest;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.PackageManager.UI;
@@ -34,7 +35,6 @@ namespace Unity.BuildDebugger
         private Label m_StatusBar;
 
         Dictionary<int, DagNode> m_NodeCache = new Dictionary<int, DagNode>();
-        List<TundraLogEntry> m_TundraLogEntries = new List<TundraLogEntry>();
 
         public void OnEnable()
         {
@@ -166,7 +166,8 @@ namespace Unity.BuildDebugger
             if (string.IsNullOrEmpty(path))
                 return;
             m_UserSettings.LastDagJsonPath = Path.GetDirectoryName(path);
-            LoadDagJson(path);
+            var data = LoadDagJson(path);
+            ConstructGraph(data, false);
             FilterBuildNodes();
             SetStatusBarMessage($"Loaded \"{path}\" with {m_GraphView.BuildNodes.Count} build nodes.");
         }
@@ -266,16 +267,35 @@ namespace Unity.BuildDebugger
 
         internal void LoadDagJsonAndTundra(string dagPath, string tundraPath)
         {
-            LoadDagJson(dagPath);
-            LoadTundraJson(tundraPath);
+            var data = LoadDagJson(dagPath);
+            var tundraEntries = LoadTundraJson(tundraPath);
+
+            var cache = new Dictionary<int, DagNode>();
+            foreach (var node in data.Nodes)
+            {
+                node.WasModifiedDuringBuild = false;
+                cache.Add(node.DebugActionIndex, node);
+            }
+
+            foreach (var entry in tundraEntries)
+            {
+                if (cache.TryGetValue(entry, out var node))
+                {
+                    node.WasModifiedDuringBuild = true;
+                }
+                else
+                    Utilities.LogWarning($"No node found for index {entry}.");
+            }
+
+            ConstructGraph(data, true);
             SetStatusBarMessage(@$"Loaded ""{dagPath}"" with {m_GraphView.BuildNodes.Count} build nodes.
-Loaded ""{tundraPath}"".");
+Loaded ""{tundraPath}"", {tundraEntries.Count} build nodes were modified.");
         }
 
-        internal void LoadDagJson(string path)
+        internal DagFile LoadDagJson(string path)
         {
             if (string.IsNullOrEmpty(path))
-                return;
+                return null;
 
             string rawJson = File.ReadAllText(path);
             var data = JsonUtility.FromJson<DagFile>(rawJson);
@@ -294,34 +314,24 @@ Loaded ""{tundraPath}"".");
                 node.Depth = CalculateDepdencyChainDepth(node, depthCache);
             }
 
-            var start = DateTime.Now;
-            m_GraphView.PopulateFromData(data);
-            var end = DateTime.Now;
+            return data;
         }
 
-        internal void LoadTundraJson(string path)
+        internal static List<int> LoadTundraJson(string path)
         {
-            m_TundraLogEntries = File.ReadLines(path)
+            return File.ReadLines(path)
                 .Select(line => JsonUtility.FromJson<TundraLogEntry>(line))
+                .Where(entry => entry.msg.Equals("runNodeAction"))
+                .Select(entry => entry.index)
                 .ToList();
+        }
 
-            foreach (var node in m_GraphView.BuildNodes.Values)
-            {
-                node.Color = Color.white;
-            }
-
-            foreach (var entry in m_TundraLogEntries)
-            {
-                if (!entry.msg.Equals("runNodeAction"))
-                    continue;
-
-                if (m_GraphView.BuildNodes.TryGetValue(entry.index, out var node))
-                {
-                    node.Color = Color.red;
-                }
-                else
-                    Utilities.LogWarning($"No node found for index {entry.index}, annotation {entry.annotation}");
-            }
+        internal void ConstructGraph(DagFile data, bool markModifiedNodes)
+        {
+            var start = DateTime.Now;
+            m_GraphView.PopulateFromData(data, markModifiedNodes);
+            var end = DateTime.Now;
+            Utilities.Log($"Graph construction took {(end - start).TotalSeconds} seconds.");
         }
 
         private int CalculateDepdencyChainDepth(DagNode node, Dictionary<int, int> depthCache)

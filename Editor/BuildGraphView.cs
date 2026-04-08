@@ -144,7 +144,7 @@ namespace Unity.BuildDebugger
             return null;
         }
 
-        public void PopulateFromData(DagFile data)
+        public void PopulateFromData(DagFile data, bool markModifiedNodes)
         {
             m_CurrentNode = null;
             m_Queue = new LinkedList<BuildNode>();
@@ -178,6 +178,8 @@ namespace Unity.BuildDebugger
                     currentNode++;
 
                     var node = BuildNode.Create(this, n, m_DagNodeCache);
+                    if (markModifiedNodes && n.WasModifiedDuringBuild)
+                        node.Color = Color.red;
                     AddElement(node);
                     m_BuildNodeCache.Add(n.DebugActionIndex, node);
                 }

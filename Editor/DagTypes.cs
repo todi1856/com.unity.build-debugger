@@ -38,6 +38,9 @@ namespace Unity.BuildDebugger
         [NonSerialized]
         public int Depth;
 
+        [NonSerialized]
+        public bool WasModifiedDuringBuild;
+
         public override string ToString()
         {
             return $"DagNode: {DisplayName} (Action: {ActionType}:{Action})";
