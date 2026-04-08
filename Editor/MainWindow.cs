@@ -78,6 +78,11 @@ namespace Unity.BuildDebugger
                 m_UserSettings.IgnoreNodePlayer = evt.newValue;
             });
 
+
+            // TODO: No public why of accessing bee why.
+            var emitBeeWhy = r.Q<ToolbarToggle>("toolbarToggleEmitBeeWhy");
+            emitBeeWhy.style.display = DisplayStyle.None;
+
             var graphContainer = r.Q<VisualElement>("graphContainer");
 
             // Create and add GraphView

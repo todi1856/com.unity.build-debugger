@@ -26,6 +26,7 @@
             <uie:Toolbar>
                 <uie:ToolbarToggle label="Load On Build" name="toolbarToggleLoadOnBuild" value="false"/>
                 <uie:ToolbarToggle label="Ignore Player Node On Load" name="toolbarIgnoreNodePlayer" value="false"/>
+                <uie:ToolbarToggle label="Emit Bee Why On Build" name="toolbarToggleEmitBeeWhy" value="false"/>
                 <uie:ToolbarButton text="Open Dag Json" name="loadButton"/>
                 <uie:ToolbarSpacer style="flex-grow: 1; flex-shrink: 0;"/>
                 <ui:VisualElement name="dbgElements" style="flex-direction: row;">
